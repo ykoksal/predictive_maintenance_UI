@@ -214,7 +214,7 @@
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="{{ url_for('static',filename='dist/img/avatar5.png')}}}" class="img-circle elevation-2"
+                    <img src="{{ url_for('static',filename='dist/img/avatar5.png')}}" class="img-circle elevation-2"
                          alt="User Image">
                 </div>
                 <div class="info">
@@ -908,7 +908,7 @@
                         <!-- small box -->
                         <div class="small-box bg-info" style="height: 85%;">
                             <div class="inner d-flex flex-column h-100">
-                                <h3>65<sup style="font-size: 20px">%</sup></h3>
+                                <h3>71<sup style="font-size: 20px">%</sup></h3>
 
                                 <p class="mt-auto">Operasyonel Zaman</p>
                             </div>
@@ -923,8 +923,8 @@
                         <!-- small box -->
                         <div class="small-box bg-secondary" style="height: 85%;">
                             <div class="inner d-flex flex-column h-100">
-                                <h3>35<sup style="font-size: 20px">%</sup></h3>
-                                <h4>24 sa</h4>
+                                <h3>29<sup style="font-size: 20px">%</sup></h3>
+                                <h4>2556 sa</h4>
                                 <p class="mt-auto">Toplam Duruş Kaybı</p>
                             </div>
                             <div class="icon">
@@ -938,8 +938,8 @@
                         <!-- small box -->
                         <div class="small-box bg-warning" style="height: 85%;">
                             <div class="inner d-flex flex-column h-100">
-                                <h3>35<sup style="font-size: 20px">%</sup></h3>
-                                <h4>24 sa</h4>
+                                <h3>5<sup style="font-size: 20px">%</sup></h3>
+                                <h4>322 sa</h4>
                                 <p class="mt-auto">Kalite Kaynaklı Duruş Kaybı</p>
                             </div>
                             <div class="icon">
@@ -953,8 +953,8 @@
                         <!-- small box -->
                         <div class="small-box bg-danger" style="height: 85%;">
                             <div class="inner d-flex flex-column h-100">
-                                <h3>35<sup style="font-size: 20px">%</sup></h3>
-                                <h4>8 sa</h4>
+                                <h3>14<sup style="font-size: 20px">%</sup></h3>
+                                <h4>881 sa</h4>
                                 <p class="mt-auto">Makine Arızası Duruş Kaybı</p>
                             </div>
                             <div class="icon">
@@ -975,30 +975,44 @@
                             <div class="card-header">
                                 <h3 class="card-title">
                                     <i class="fas fa-chart-pie mr-1"></i>
-                                    Sales
+                                    Duruşlar
                                 </h3>
                                 <div class="card-tools">
                                     <ul class="nav nav-pills ml-auto">
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="#revenue-chart" data-toggle="tab">Area</a>
+                                            <a class="nav-link active" href="#makine-chart" data-toggle="tab">Makine
+                                                Arıza Duruş</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#sales-chart" data-toggle="tab">Donut</a>
+                                            <a class="nav-link" href="#kalite-chart" data-toggle="tab"
+                                               id="kalite-chart-link">Kalite Duruş</a>
                                         </li>
                                     </ul>
                                 </div>
                             </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div class="tab-content p-0">
-                                    <!-- Morris chart - Sales -->
-                                    <div class="chart tab-pane active chart-container" id="revenue-chart"
-                                         style="position: relative;">
-                                        <canvas id="revenue-chart-canvas"
-                                                class="chartjs-render-monitor"></canvas>
+                                    <!-- Machine Stop Graphs -->
+                                    <!--                                    <div class="chart tab-pane active chart-container" id="revenue-chart"-->
+                                    <!--                                         style="position: relative;">-->
+                                    <!--                                        <canvas id="revenue-chart-canvas"-->
+                                    <!--                                                class="chartjs-render-monitor"></canvas>-->
+                                    <!--                                    </div>-->
+                                    <div class="chart tab-pane" id="makine-chart"
+                                         style="position: relative; height: 100%;">
+                                        <img src="{{url_for('static', filename='dist/img/makine_ariza.jpg')}}"
+                                             alt="Makine Arıza Duruş Süreleri"
+                                             style="width: 100%; height: 100%; object-fit: contain;">
                                     </div>
-                                    <div class="chart tab-pane chart-container" id="sales-chart"
-                                         style="position: relative;">
-                                        <canvas id="sales-chart-canvas"></canvas>
+                                    <!--                                    <div class="chart tab-pane chart-container" id="sales-chart"-->
+                                    <!--                                         style="position: relative;">-->
+                                    <!--                                        <canvas id="sales-chart-canvas"></canvas>-->
+                                    <!--                                    </div>-->
+                                    <div class="chart tab-pane" id="kalite-chart"
+                                         style="position: relative; height: 100%;">
+                                        <img src="{{url_for('static', filename='dist/img/kalite_durus.jpg')}}"
+                                             alt="Kalite Problemi Duruş Süreleri"
+                                             style="width: 100%; height: 100%; object-fit: contain;">
                                     </div>
                                 </div>
                             </div><!-- /.card-body -->
@@ -1032,7 +1046,7 @@
 <!-- jQuery -->
 <script src="{{ url_for('static', filename='plugins/jquery/jquery.min.js') }}"></script>
 <!-- jQuery UI 1.11.4 -->
-<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="{{ url_for('static', filename='plugins/jquery-ui/jquery-ui.min.js')}}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
     $.widget.bridge('uibutton', $.ui.button)
@@ -1042,30 +1056,29 @@
 <!-- ChartJS -->
 <script src="{{url_for('static',filename='plugins/chart.js/Chart.min.js')}}"></script>
 <!-- Sparkline -->
-<script src="plugins/sparklines/sparkline.js"></script>
+<script src="{{ url_for('static', filename='plugins/sparklines/sparkline.js')}}"></script>
 <!-- JQVMap -->
-<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<script src="{{ url_for('static', filename='plugins/jqvmap/jquery.vmap.min.js')}}"></script>
+<script src="{{ url_for('static', filename='plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script>
 <!-- jQuery Knob Chart -->
-<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<script src="{{ url_for('static', filename='plugins/jquery-knob/jquery.knob.min.js')}}"></script>
 <!-- daterangepicker -->
-<script src="plugins/moment/moment.min.js"></script>
-<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<script src="{{ url_for('static', filename='plugins/moment/moment.min.js')}}"></script>
+<script src="{{ url_for('static', filename='plugins/daterangepicker/daterangepicker.js')}}"></script>
 <!-- Tempusdominus Bootstrap 4 -->
-<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="{{ url_for('static', filename='plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
 <!-- Summernote -->
-<script src="plugins/summernote/summernote-bs4.min.js"></script>
+<script src="{{ url_for('static', filename='plugins/summernote/summernote-bs4.min.js')}}"></script>
 <!-- overlayScrollbars -->
-<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!--<script src="{{ url_for('static', filename='plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>-->
 <!-- AdminLTE App -->
 <script src="{{ url_for('static', filename='dist/js/adminlte.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
+<script src="{{ url_for('static', filename='dist/js/demo.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="dist/js/pages/dashboard.js"></script>
+<script src="{{ url_for('static', filename='dist/js/pages/dashboard.js')}}"></script>
 <!-- Ionicons JS file -->
 <script src="https://cdn.jsdelivr.net/npm/ionicons@5.5.3/dist/ionicons.js"></script>
-
 <script>
     const revenueChartCanvas = document.getElementById('revenue-chart-canvas').getContext('2d');
     const salesChartCanvas = document.getElementById('sales-chart-canvas').getContext('2d');
@@ -1102,6 +1115,16 @@
             maintainAspectRatio: false,
         }
     });
+    <!-- TODO: Make charts to appear after refreshing the page -->
+    window.onload = function () {
+        // Wait for a short time to ensure the page is fully loaded
+        setTimeout(function () {
+            // Get the link to the desired tab
+            const link = document.querySelector('#kalite-chart-link');
+            // Click on the link
+            link.click();
+        }, 500);
+    };
 </script>
 </body>
 </html>
