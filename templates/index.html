@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Predictive Maintenance | Dashboard</title>
+    <title>Kestirimci Bakım | Analitik Platform</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -12,41 +12,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fontawesome-free/css/all.min.css') }}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Ionicons Newer -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.3/css/ionicons.min.css">
-    <!-- Tempusdominus Bootstrap 4 -->
-    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-    <!-- JQVMap -->
-    <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/adminlte.min.css') }}">
-    <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-    <!-- Daterange picker -->
-    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
-    <!-- summernote -->
-    <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
     <style>
-        /*.text-white {*/
-        /*    color: #ffffff;*/
-        /*}*/
-
         .bg-warning .inner h3,
         .bg-warning .inner h4,
         .bg-warning .inner p {
             color: #ffffff;
-        }
-
-        .chart-container {
-            height: 400px;
-        }
-
-        @media (max-width: 767px) {
-            .chart-container {
-                height: 200px;
-            }
         }
 
         .brand-link {
@@ -85,10 +57,10 @@
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="hat_duruslari" class="nav-link">Home</a>
+                <a href="hat_duruslari" class="nav-link">Ana Sayfa</a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="#" class="nav-link">Contact</a>
+                <a href="#" class="nav-link">İletişim</a>
             </li>
         </ul>
 
@@ -102,8 +74,8 @@
                 <div class="navbar-search-block">
                     <form class="form-inline">
                         <div class="input-group input-group-sm">
-                            <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                                   aria-label="Search">
+                            <input class="form-control form-control-navbar" type="search" placeholder="Ara"
+                                   aria-label="Ara">
                             <div class="input-group-append">
                                 <button class="btn btn-navbar" type="submit">
                                     <i class="fas fa-search"></i>
@@ -183,8 +155,8 @@
             <!-- SidebarSearch Form -->
             <div class="form-inline">
                 <div class="input-group" data-widget="sidebar-search">
-                    <input class="form-control form-control-sidebar" type="search" placeholder="Search"
-                           aria-label="Search">
+                    <input class="form-control form-control-sidebar" type="search" placeholder="Ara"
+                           aria-label="Ara">
                     <div class="input-group-append">
                         <button class="btn btn-sidebar">
                             <i class="fas fa-search fa-fw"></i>
@@ -203,7 +175,7 @@
                         <a href="#" class="nav-link active">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
-                                Dashboard
+                                Gösterge Paneli
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
@@ -217,14 +189,46 @@
                             <li class="nav-item">
                                 <a href="{{ url_for('dashboard_v2') }}" class="nav-link">
                                     <i class="fas fa-bars nav-icon"></i>
-                                    <p>IOT Sensör Grafikleri</p>
+                                    <p>IOT Sensör Grafikleri
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
                                 </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ url_for('dashboard_v2') }}" class="nav-link">
+                                            <i class="fas fa-circle nav-icon"></i>
+                                            <p>MTP101</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url_for('dashboard_v2') }}" class="nav-link">
+                                            <i class="fas fa-circle nav-icon"></i>
+                                            <p>MTP102</p>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ url_for('dashboard_v3') }}" class="nav-link">
                                     <i class="fas fa-bars nav-icon"></i>
-                                    <p>Arıza Tahmin</p>
+                                    <p>Arıza Tahmin
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
                                 </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ url_for('dashboard_v3') }}" class="nav-link">
+                                            <i class="fas fa-circle nav-icon"></i>
+                                            <p>MTP101</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url_for('dashboard_v3') }}" class="nav-link">
+                                            <i class="fas fa-circle nav-icon"></i>
+                                            <p>MTP102</p>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
@@ -242,11 +246,11 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Dashboard</h1>
+                        <h1 class="m-0">Gösterge Paneli</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#">Ana Sayfa</a></li>
                             <li class="breadcrumb-item active">Hat Duruşları</li>
                         </ol>
                     </div><!-- /.col -->
@@ -325,7 +329,7 @@
                 <!-- Main row -->
                 <div class="row">
                     <!-- Left col -->
-                    <section class="col-lg-12 connectedSortable">
+                    <section class="col-lg-12">
                         <!-- Custom tabs (Charts with tabs)-->
                         <div class="card">
                             <div class="card-header">
@@ -348,22 +352,12 @@
                             </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div class="tab-content p-0">
-                                    <!-- Machine Stop Graphs -->
-                                    <!--                                    <div class="chart tab-pane active chart-container" id="revenue-chart"-->
-                                    <!--                                         style="position: relative;">-->
-                                    <!--                                        <canvas id="revenue-chart-canvas"-->
-                                    <!--                                                class="chartjs-render-monitor"></canvas>-->
-                                    <!--                                    </div>-->
                                     <div class="chart tab-pane" id="makine-chart"
                                          style="position: relative; height: 100%;">
                                         <img src="{{url_for('static', filename='dist/img/makine_ariza.jpg')}}"
                                              alt="Makine Arıza Duruş Süreleri"
                                              style="width: 100%; height: 100%; object-fit: contain;">
                                     </div>
-                                    <!--                                    <div class="chart tab-pane chart-container" id="sales-chart"-->
-                                    <!--                                         style="position: relative;">-->
-                                    <!--                                        <canvas id="sales-chart-canvas"></canvas>-->
-                                    <!--                                    </div>-->
                                     <div class="chart tab-pane" id="kalite-chart"
                                          style="position: relative; height: 100%;">
                                         <img src="{{url_for('static', filename='dist/img/kalite_durus.jpg')}}"
@@ -408,7 +402,6 @@
 <script src="{{ url_for('static', filename='plugins/sparklines/sparkline.js')}}"></script>
 <!-- JQVMap -->
 <script src="{{ url_for('static', filename='plugins/jqvmap/jquery.vmap.min.js')}}"></script>
-<script src="{{ url_for('static', filename='plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script>
 <!-- jQuery Knob Chart -->
 <script src="{{ url_for('static', filename='plugins/jquery-knob/jquery.knob.min.js')}}"></script>
 <!-- daterangepicker -->
@@ -429,42 +422,6 @@
 <!-- Ionicons JS file -->
 <script src="https://cdn.jsdelivr.net/npm/ionicons@5.5.3/dist/ionicons.js"></script>
 <script>
-    const revenueChartCanvas = document.getElementById('revenue-chart-canvas').getContext('2d');
-    const salesChartCanvas = document.getElementById('sales-chart-canvas').getContext('2d');
-
-    // Example data for the charts
-    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-    const data = {
-        labels: labels,
-        datasets: [{
-            label: 'Sales',
-            data: [65, 59, 80, 81, 56, 55, 40],
-            fill: false,
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1
-        }]
-    };
-
-    // Create the revenue chart
-    const revenueChart = new Chart(revenueChartCanvas, {
-        type: 'line',
-        data: data,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-        }
-    });
-
-    // Create the sales chart
-    const salesChart = new Chart(salesChartCanvas, {
-        type: 'doughnut',
-        data: data,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-        }
-    });
-    <!-- TODO: Make charts to appear after refreshing the page -->
     window.onload = function () {
         // Wait for a short time to ensure the page is fully loaded
         setTimeout(function () {
