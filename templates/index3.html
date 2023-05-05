@@ -1,4 +1,16 @@
 {% block content %}
+<style>
+    .custom-dropdown-menu {
+        max-height: 200px; /* Change this value to set the dropdown height limit */
+        overflow-y: auto;
+        left: -15px;
+        right: auto; /* This will align the dropdown menu to the right of the button */
+        /*max-width: 100vw;*/
+        /*overflow-x: hidden; */
+    }
+</style>
+<script data-json='{{ data_json | safe }}'></script>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -6,12 +18,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Gösterge Paneli</h1>
+                    <h1 class="m-0">{{machine}}</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ url_for('ana_sayfa')}}">Ana Sayfa</a></li>
-                        <li class="breadcrumb-item active">Hat Duruşları</li>
+                        <li class="breadcrumb-item active">Arıza Tahmin</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -31,23 +43,23 @@
                         <div class="card-header clearfix">
                             <h3 class="card-title">
                                 <i class="fas fa-chart-line mr-2"></i>
-                                IOT Sensör Grafikleri
+                                Arıza Olasılıkları
                             </h3>
                             <div class="dropdown float-right">
                                 <button class="btn btn-secondary dropdown-toggle" type="button"
                                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
-                                    Sensörler
+                                    Arızalar
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
+                                <div class="dropdown-menu custom-dropdown-menu" aria-labelledby="dropdownMenuButton"
+                                     id="feature-select">
+                                    {% for col in columns %}
+                                    <a class="dropdown-item" href="#" onclick="updateChart('{{ col }}');">{{ col }}</a>
+                                    {% endfor %}
                                 </div>
                             </div><!-- /.drop-down-list -->
                             <div class="card-body mt-4">
-                                <div id="time_series_chart" style="position: static;">
-                                    {{ time_series_chart|safe }}
+                                <div id="time_series_chart">
                                 </div>
                             </div><!-- /.card-body -->
                         </div><!-- /.card-header -->
@@ -60,4 +72,60 @@
     </section>
     <!-- /.content -->
 </div>
+<script>
+    //TODO: put it in a separate .js file
+    function initDashboard(dataJson) {
+
+        const data = JSON.parse('{{ data_json | safe }}');
+        const chartContainer = document.getElementById('time_series_chart');
+
+        function updateChart(selectedFeature) {
+            // Prepare the chart data based on the selected feature
+            const chartData = {
+                x: data.map(item => new Date(item.date)),
+                y: data.map(item => item[selectedFeature]),
+                mode: 'lines',
+                line: {
+                    color: '#08a14e',
+                },
+            };
+            // Check if the chart is already rendered
+            if (!chartContainer.data) {
+                // Create a new chart with the selected data
+                Plotly.newPlot(chartContainer, [chartData], {
+                    xaxis: {
+                        type: 'date',
+                    },
+                    yaxis: {
+                        title: {
+                            text: selectedFeature,
+                        },
+                    },
+                });
+            } else {
+                // Update the existing chart with the selected data
+                var updateLayout = {
+                    'yaxis.title': selectedFeature
+                };
+                Plotly.update(chartContainer, {x: [chartData.x], y: [chartData.y]}, updateLayout)
+            }
+            // Set the initial value for the dropdown
+        }
+
+        window.updateChart = updateChart;
+
+        function initializeChart() {
+            <!-- Include the data_json variable as a script -->
+            const initialFeature = '{{ columns[0] }}';
+            updateChart(initialFeature);
+        }
+
+        window.initializeChart = initializeChart;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeChart();
+        });
+    }
+</script>
 {% endblock %}
+

@@ -4,58 +4,48 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objs as go
 import plotly.offline as opy
+import json
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def ana_sayfa():
-
     return render_template('home.html')
 
 
 @app.route('/hat_duruslari')
 def hat_duruslari():
-
     return render_template('index.html')
 
 
-@app.route('/dashboard_v2')
-def dashboard_v2():
-    time_series_data = pd.read_csv("static/dist/pd/MTP101_onsagbiyel.csv")
-    time_series_data.rename(columns={"101-9": "value"}, inplace=True)
-    # time_series_data = pd.read_csv("static/dist/pd/MTP102_onsagbiyel.csv")
-    time_series_data["date"] = pd.to_datetime(time_series_data["date"])
-    time_series_data = time_series_data.loc[time_series_data["date"] <= np.datetime64("2023-02-04T13:13:00")]
-    time_series_chart = go.Figure()
-    time_series_chart.add_trace(go.Scatter(x=time_series_data['date'], y=time_series_data['value'], mode='lines'))
+@app.route('/dashboard_v2/<machine>')
+def dashboard_v2(machine):
+    if machine == "MTP101":
+        df = pd.read_csv("static/dist/pd/MTP101.csv")
+    elif machine == "MTP102":
+        df = pd.read_csv("static/dist/pd/MTP102.csv")
+    else:
+        return "Invalid Data", 400
 
-    time_series_chart_layout = go.Layout(
-        title='Ön Sağ Biyel Sıcaklığı(°C)',
-        xaxis=dict(title='Tarih'),
-        yaxis=dict(title='Değer')
-    )
-    time_series_chart.update_layout(time_series_chart_layout)
+    df["date"] = pd.to_datetime(df["date"])
+    df = df.loc[df["date"] <= np.datetime64("2023-02-04T13:13:00")]
+    data_json = df.to_json(orient="records")
+    columns = df.columns[1:-1].tolist()
+    return render_template('index2.html', data_json=data_json, columns=columns, machine=machine)
 
-    # Convert the charts to HTML
-    time_series_chart_html = opy.plot(time_series_chart, auto_open=False, output_type='div')
-
-    # Render the template and store it in a variable
-    return render_template('index2.html', time_series_chart=time_series_chart_html)
-
-
-@app.route('/dashboard_v3')
-def dashboard_v3():
-    # Create a time series chart
-    time_series_data = pd.DataFrame({
-        'date': pd.date_range(start='1/1/2020', periods=100, freq='M'),
-        'value': (20 + 2 * np.random.randn(100)).cumsum()
-    })
-
-    time_series_chart = px.line(time_series_data, x='date', y='value')
-
-    return render_template('index3.html', time_series_chart=time_series_chart.to_html())
-
+@app.route('/dashboard_v3/<machine>')
+def dashboard_v3(machine):
+    if machine == "MTP101":
+        df = pd.read_excel("static/dist/pd/SAP_data_prediction.xlsx")
+    elif machine == "MTP102":
+        df = pd.read_excel("static/dist/pd/SAP_data_prediction.xlsx")
+    else:
+        return "Invalid Data", 400
+    df["date"] = pd.to_datetime(df["date"])
+    data_json = json.dumps(json.loads(df.to_json(orient="records")), ensure_ascii=False)
+    columns = df.columns[1:].tolist()
+    return render_template('index3.html', data_json=data_json, columns=columns, machine=machine)
 
 if __name__ == '__main__':
     app.run(debug=True)

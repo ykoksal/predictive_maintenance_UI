@@ -189,7 +189,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" data-url="{{ url_for('dashboard_v2')}}" class="nav-link update-content">
+                                <a href="#" data-url="{{ url_for('dashboard_v2', machine='MTP101')}}"
+                                   class="nav-link update-content">
                                     <i class="fas fa-bars nav-icon"></i>
                                     <p>IOT Sensör Grafikleri
                                         <i class="fas fa-angle-left right"></i>
@@ -197,14 +198,14 @@
                                 </a>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-                                        <a href="#" data-url="{{ url_for('dashboard_v2') }}"
+                                        <a href="#" data-url="{{ url_for('dashboard_v2', machine='MTP101') }}"
                                            class="nav-link update-content">
                                             <i class="fas fa-circle nav-icon"></i>
                                             <p>MTP101</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#" data-url="{{ url_for('dashboard_v2') }}"
+                                        <a href="#" data-url="{{ url_for('dashboard_v2', machine='MTP102') }}"
                                            class="nav-link update-content">
                                             <i class="fas fa-circle nav-icon"></i>
                                             <p>MTP102</p>
@@ -213,7 +214,8 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a href="#" data-url="{{ url_for('dashboard_v3') }}" class="nav-link update-content">
+                                <a href="#" data-url="{{ url_for('dashboard_v3', machine='MTP101') }}"
+                                   class="nav-link update-content">
                                     <i class="fas fa-bars nav-icon"></i>
                                     <p>Arıza Tahmin
                                         <i class="fas fa-angle-left right"></i>
@@ -221,14 +223,14 @@
                                 </a>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-                                        <a href="#" data-url="{{ url_for('dashboard_v3') }}"
+                                        <a href="#" data-url="{{ url_for('dashboard_v3', machine='MTP101') }}"
                                            class="nav-link update-content">
                                             <i class="fas fa-circle nav-icon"></i>
                                             <p>MTP101</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#" data-url="{{ url_for('dashboard_v3') }}"
+                                        <a href="#" data-url="{{ url_for('dashboard_v3', machine='MTP102') }}"
                                            class="nav-link update-content">
                                             <i class="fas fa-circle nav-icon"></i>
                                             <p>MTP102</p>
@@ -295,6 +297,7 @@
 <!-- Ionicons JS file -->
 <script src="https://cdn.jsdelivr.net/npm/ionicons@5.5.3/dist/ionicons.js"></script>
 <script>
+    //TODO: put these scripts into a separate .js file
     window.onload = function () {
         // Wait for a short time to ensure the page is fully loaded
         setTimeout(function () {
@@ -319,17 +322,29 @@
                 type: 'GET',
                 success: function (data) {
                     $('#content-block').html(data);
+
+                    if (url.startsWith("{{ url_for('dashboard_v2', machine='') }}") || url.startsWith("{{ url_for('dashboard_v3', machine='') }}")) {
+                        // Call the initDashboard function and pass the data_json variable as a string
+                        const dataJson = $('#content-block').find('script[data-json]').attr('data-json');
+                        initDashboard(dataJson);
+                    }
+                    // Check if the current content has a time_series_chart element
+                    if ($('#content-block').find('#time_series_chart').length) {
+                        initializeChart();
+                    }
                     // Check if the current content is index.html
                     if (url === "{{ url_for('hat_duruslari') }}") {
                         // Manually trigger the click event on the #kalite-chart-link tab.
                         $("#kalite-chart-link").click();
                     }
-                },
+                }
+                ,
                 error: function () {
                     alert('An error occurred while updating the content.');
                 }
             });
-        });
+        })
+        ;
     });
 </script>
 </body>
