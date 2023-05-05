@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, render_template_string
 import plotly.express as px
 import pandas as pd
 import numpy as np
@@ -9,40 +9,15 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def index():
-    # Create a time series chart
-    time_series_data = pd.DataFrame({
-        'date': pd.date_range(start='1/1/2020', periods=100, freq='M'),
-        'value': (20 + 2 * np.random.randn(100)).cumsum()
-    })
+def ana_sayfa():
 
-    time_series_chart = go.Figure()
-    time_series_chart.add_trace(go.Scatter(x=time_series_data['date'], y=time_series_data['value'], mode='lines'))
-
-    time_series_chart_layout = go.Layout(
-        title='Time Series Chart',
-        xaxis=dict(title='Date'),
-        yaxis=dict(title='Value')
-    )
-    time_series_chart.update_layout(time_series_chart_layout)
-
-    # Convert the charts to HTML
-    time_series_chart_html = opy.plot(time_series_chart, auto_open=False, output_type='div')
-
-    return render_template('index.html', time_series_chart=time_series_chart_html)
+    return render_template('home.html')
 
 
 @app.route('/hat_duruslari')
 def hat_duruslari():
-    # Create a time series chart
-    time_series_data = pd.DataFrame({
-        'date': pd.date_range(start='1/1/2020', periods=100, freq='M'),
-        'value': (20 + 2 * np.random.randn(100)).cumsum()
-    })
 
-    time_series_chart = px.line(time_series_data, x='date', y='value')
-
-    return render_template('index.html', time_series_chart=time_series_chart.to_html())
+    return render_template('index.html')
 
 
 @app.route('/dashboard_v2')
@@ -65,6 +40,7 @@ def dashboard_v2():
     # Convert the charts to HTML
     time_series_chart_html = opy.plot(time_series_chart, auto_open=False, output_type='div')
 
+    # Render the template and store it in a variable
     return render_template('index2.html', time_series_chart=time_series_chart_html)
 
 
