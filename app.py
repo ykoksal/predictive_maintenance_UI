@@ -23,13 +23,16 @@ def hat_duruslari():
 def dashboard_v2(machine):
     if machine == "MTP101":
         df = pd.read_csv("static/dist/pd/MTP101.csv")
+        df["date"] = pd.to_datetime(df["date"])
+        df = df.loc[df["date"] <= np.datetime64("2023-02-04T13:13:00")]
     elif machine == "MTP102":
         df = pd.read_csv("static/dist/pd/MTP102.csv")
+        df["date"] = pd.to_datetime(df["date"])
+        df = df.loc[(df["date"] >= np.datetime64("2023-02-07T16:05:00"))
+                    & (df["date"] <= np.datetime64("2023-02-22T03:29:00"))]
     else:
         return "Invalid Data", 400
 
-    df["date"] = pd.to_datetime(df["date"])
-    df = df.loc[df["date"] <= np.datetime64("2023-02-04T13:13:00")]
     data_json = df.to_json(orient="records")
     columns = df.columns[1:-1].tolist()
     return render_template('index2.html', data_json=data_json, columns=columns, machine=machine)
@@ -37,9 +40,9 @@ def dashboard_v2(machine):
 @app.route('/dashboard_v3/<machine>')
 def dashboard_v3(machine):
     if machine == "MTP101":
-        df = pd.read_excel("static/dist/pd/SAP_data_prediction.xlsx")
+        df = pd.read_excel("static/dist/pd/MTP101_ariza.xlsx")
     elif machine == "MTP102":
-        df = pd.read_excel("static/dist/pd/SAP_data_prediction.xlsx")
+        df = pd.read_excel("static/dist/pd/MTP102_ariza.xlsx")
     else:
         return "Invalid Data", 400
     df["date"] = pd.to_datetime(df["date"])
