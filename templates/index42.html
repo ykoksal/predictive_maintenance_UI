@@ -1,0 +1,139 @@
+{% block content %}
+<style>
+    .custom-dropdown-menu {
+        max-height: 200px; /* Change this value to set the dropdown height limit */
+        overflow-y: auto;
+        left: -15px;
+        right: auto; /* This will align the dropdown menu to the right of the button */
+        /*max-width: 100vw;*/
+        /*overflow-x: hidden; */
+    }
+</style>
+<script data-json='{{ data_json | safe }}'>
+</script>
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">{{dashboard}}</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ url_for('ana_sayfa')}}">Ana Sayfa</a></li>
+                        <li class="breadcrumb-item active">Operatör</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Main row -->
+            <div class="row">
+                <!-- Left col -->
+                <section class="col-lg-12">
+                    <!-- Charts -->
+                    <div class="card ">
+                        <div class="card-header clearfix">
+                            <h3 class="card-title">
+                                <i class="fas fa-chart-line mr-2"></i>
+                                Aylık Hata Oranı
+                            </h3>
+
+                            <!--                            <div class="dropdown float-right">-->
+                            <!--                                <button class="btn btn-secondary dropdown-toggle" type="button"-->
+                            <!--                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"-->
+                            <!--                                        aria-expanded="false">-->
+                            <!--                                    Arızalar-->
+                            <!--                                </button>-->
+                            <!--                                <div class="dropdown-menu custom-dropdown-menu" aria-labelledby="dropdownMenuButton"-->
+                            <!--                                     id="feature-select">-->
+                            <!--                                    {% for col in columns %}-->
+                            <!--                                    <a class="dropdown-item" href="#" onclick="updateChart('{{ col }}');">{{ col }}</a>-->
+                            <!--                                    {% endfor %}-->
+                            <!--                                </div>-->
+                            <!--                            </div>&lt;!&ndash; /.drop-down-list &ndash;&gt;-->
+                            <div class="card-body mt-4">
+                                <div id="time_series_chart">
+                                    <script>
+                                        updateChart('{{ col }}')
+                                    </script>
+                                </div>
+                            </div><!-- /.card-body -->
+                        </div><!-- /.card-header -->
+                    </div><!-- /.card -->
+                </section>
+                <!-- /.Left col -->
+            </div>
+            <!-- /.row (main row) -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<script>
+    //TODO: put it in a separate .js file
+    function initDashboard(dataJson) {
+
+        const data = JSON.parse('{{ data_json | safe }}');
+        const chartContainer = document.getElementById('time_series_chart');
+
+        function updateChart() {
+
+            // Extract the column names
+            const columns = Object.keys(data[0]).slice(1);
+
+            // Convert the date strings to Date objects
+            data.forEach(item => {
+                item.date = new Date(item.date);
+            });
+            // Create traces for each column
+            const traces = columns.map(column => ({
+                x: data.map(item => item.date),
+                y: data.map(item => item[column]),
+                name: column,
+                mode: 'lines',
+            }));
+            // Check if the chart is already rendered
+            if (!chartContainer.data) {
+                // Create a new chart with the selected data
+                Plotly.newPlot(chartContainer, traces, {
+                    xaxis: {
+                        type: 'date',
+                    },
+                    yaxis: {
+                        title: {
+                            text: 'Arıza/Vardiya Süresi',
+                        },
+                    },
+                });
+            } else {
+                // Update the existing chart with the selected data
+                var update = {x: traces.map(trace => trace.x), y: traces.map(trace => trace.y)};
+                Plotly.update(chartContainer, update);
+            }
+        }
+
+        window.updateChart = updateChart;
+
+        function initializeChart(selectedFeature) {
+            <!-- Include the data_json variable as a script -->
+            // const initialFeature = selectedFeature;
+            updateChart(selectedFeature);
+        }
+
+        window.initializeChart = initializeChart;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeChart();
+        });
+    }
+</script>
+{% endblock %}
+

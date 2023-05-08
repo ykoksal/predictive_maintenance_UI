@@ -238,6 +238,39 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item">
+                                <a href="#"
+                                   class="nav-link">
+                                    <i class="fas fa-bars nav-icon"></i>
+                                    <p>Operatör
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="#" data-url="{{ url_for('dashboard_v41') }}"
+                                           class="nav-link update-content">
+                                            <i class="fas fa-circle nav-icon"></i>
+                                            <p>Genel Skorlama</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" data-url="{{ url_for('dashboard_v42') }}"
+                                           class="nav-link update-content">
+                                            <i class="fas fa-circle nav-icon"></i>
+                                            <p>Aylık Hata Oranı</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" data-url="{{ url_for('dashboard_v5') }}"
+                                   class="nav-link update-content">
+                                    <i class="fas fa-bars nav-icon"></i>
+                                    <p>Parça Ömrü
+                                    </p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -323,7 +356,8 @@
                 success: function (data) {
                     $('#content-block').html(data);
 
-                    if (url.startsWith("{{ url_for('dashboard_v2', machine='') }}") || url.startsWith("{{ url_for('dashboard_v3', machine='') }}")) {
+                    if (url.startsWith("{{ url_for('dashboard_v2', machine='') }}") || url.startsWith("{{ url_for('dashboard_v3', machine='') }}") ||
+                        url.startsWith("{{ url_for('dashboard_v41') }}") || url.startsWith("{{ url_for('dashboard_v42') }}")) {
                         // Call the initDashboard function and pass the data_json variable as a string
                         const dataJson = $('#content-block').find('script[data-json]').attr('data-json');
                         initDashboard(dataJson);
@@ -331,6 +365,9 @@
                     // Check if the current content has a time_series_chart element
                     if ($('#content-block').find('#time_series_chart').length) {
                         initializeChart();
+                    }
+                    if ($('#content-block').find('#bar_chart').length) {
+                        initializeBarChart();
                     }
                     // Check if the current content is index.html
                     if (url === "{{ url_for('hat_duruslari') }}") {

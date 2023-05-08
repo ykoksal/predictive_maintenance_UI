@@ -85,47 +85,69 @@
                 x: data.map(item => new Date(item.date)),
                 y: data.map(item => item[selectedFeature]),
                 mode: 'lines',
-                line: {
-                    color: '#08a14e',
-                },
-            };
-            // Check if the chart is already rendered
-            if (!chartContainer.data) {
+                    line: {
+                        color: '#08a14e',
+                    },
+                };
+                // Check if the chart is already rendered
+                if(
+            !chartContainer.data
+        )
+            {
                 // Create a new chart with the selected data
                 Plotly.newPlot(chartContainer, [chartData], {
+                    title: selectedFeature,
                     xaxis: {
                         type: 'date',
                     },
                     yaxis: {
                         title: {
-                            text: selectedFeature,
+                            text: "Ariza Olasılık%",
                         },
+                        tickformat: '.0%',
+                        range: [0, 1]
                     },
+                    shapes: [{
+                        type: 'line',
+                        y0: 0.8,
+                        y1: 0.8,
+                        x0: 0, // Set the starting x value to the first date in the data
+                        x1: 1, // Set the ending x value to the last date in the data
+                        xref: 'paper', // Use the x-axis data coordinates
+                        yref: 'y',
+                        line: {
+                            color: 'red',
+                            width: 2
+                        }
+                    }]
                 });
-            } else {
+            }
+        else
+            {
                 // Update the existing chart with the selected data
                 var updateLayout = {
-                    'yaxis.title': selectedFeature
+                    'title': selectedFeature,
+                    'yaxis.title': "Arıza Olasılık%"
                 };
                 Plotly.update(chartContainer, {x: [chartData.x], y: [chartData.y]}, updateLayout)
             }
             // Set the initial value for the dropdown
         }
 
-        window.updateChart = updateChart;
+            window.updateChart = updateChart;
 
-        function initializeChart() {
-            <!-- Include the data_json variable as a script -->
-            const initialFeature = '{{ columns[0] }}';
-            updateChart(initialFeature);
+            function initializeChart() {
+                <!-- Include the data_json variable as a script -->
+                const initialFeature = '{{ columns[0] }}';
+                updateChart(initialFeature);
+            }
+
+            window.initializeChart = initializeChart;
+
+            document.addEventListener('DOMContentLoaded', function () {
+                initializeChart();
+            });
         }
-
-        window.initializeChart = initializeChart;
-
-        document.addEventListener('DOMContentLoaded', function () {
-            initializeChart();
-        });
-    }
 </script>
 {% endblock %}
 

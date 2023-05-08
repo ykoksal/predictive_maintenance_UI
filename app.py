@@ -37,6 +37,7 @@ def dashboard_v2(machine):
     columns = df.columns[1:-1].tolist()
     return render_template('index2.html', data_json=data_json, columns=columns, machine=machine)
 
+
 @app.route('/dashboard_v3/<machine>')
 def dashboard_v3(machine):
     if machine == "MTP101":
@@ -49,6 +50,32 @@ def dashboard_v3(machine):
     data_json = json.dumps(json.loads(df.to_json(orient="records")), ensure_ascii=False)
     columns = df.columns[1:].tolist()
     return render_template('index3.html', data_json=data_json, columns=columns, machine=machine)
+
+
+@app.route('/dashboard_v41')
+def dashboard_v41():
+    df = pd.read_excel("static/dist/pd/export_operator_genel.xlsx")
+    data_json = json.dumps(json.loads(df.to_json(orient="records")), ensure_ascii=False)
+    return render_template('index41.html',
+                           data_json=data_json,
+                           columns='Genel Skorlama',
+                           )
+
+
+@app.route('/dashboard_v42')
+def dashboard_v42():
+    df = pd.read_excel("static/dist/pd/operator_aylik_merged.xlsx")
+    df["date"] = pd.to_datetime(df["date"])
+    data_json = json.dumps(json.loads(df.to_json(orient="records")), ensure_ascii=False)
+
+    return render_template('index42.html',
+                           data_json=data_json,
+                           columns='Aylık Hata Oranı',
+                           )
+@app.route('/dashboard_v5')
+def dashboard_v5():
+    return render_template('index5.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
