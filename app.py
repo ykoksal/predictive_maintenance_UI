@@ -76,16 +76,22 @@ def dashboard_v42():
 def dashboard_v5():
     return render_template('index5.html')
 
-@app.route('/json_data/<machine>')
-def json_data(machine):
+@app.route('/json_data/<machine>/<selectedFeature>')
+def json_data(machine, selectedFeature):
     if machine == "MTP101":
-        df = pd.read_excel("static/dist/pd/MTP101_ariza.xlsx")
+        df = pd.read_csv("static/dist/pd/MTP101.csv")
+        df["date"] = pd.to_datetime(df["date"])
+        df = df.loc[df["date"] <= np.datetime64("2023-02-04T13:13:00")]
     elif machine == "MTP102":
-        df = pd.read_excel("static/dist/pd/MTP102_ariza.xlsx")
+        df = pd.read_csv("static/dist/pd/MTP102.csv")
+        df["date"] = pd.to_datetime(df["date"])
+        df = df.loc[(df["date"] >= np.datetime64("2023-02-07T16:05:00"))
+                    & (df["date"] <= np.datetime64("2023-02-22T03:29:00"))]
     else:
         return "Invalid Data", 400
-    df["date"] = pd.to_datetime(df["date"])
-    data_json = json.dumps(json.loads(df.to_json(orient="records")), ensure_ascii=False)
+
+    df_selected = df[[selectedFeature, "date"]].copy()
+    data_json = df_selected.to_json(orient="records")
     return data_json
 
 

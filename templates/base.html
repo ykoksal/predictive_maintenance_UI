@@ -359,8 +359,7 @@
                     if (url.startsWith("{{ url_for('dashboard_v2', machine='') }}") || url.startsWith("{{ url_for('dashboard_v3', machine='') }}") ||
                         url.startsWith("{{ url_for('dashboard_v41') }}") || url.startsWith("{{ url_for('dashboard_v42') }}")) {
                         // Call the initDashboard function and pass the data_json variable as a string
-                        const dataJson = $('#content-block').find('script[data-json]').attr('data-json');
-                        initDashboard(dataJson);
+                        initDashboard();
                     }
                     // Check if the current content has a time_series_chart element
                     if ($('#content-block').find('#time_series_chart').length) {

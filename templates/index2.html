@@ -73,57 +73,53 @@
 </div>
 <script>
     //TODO: put it in a separate .js file
-    function initDashboard(dataJson) {
-
-        const data = JSON.parse('{{ data_json | safe }}');
+    function initDashboard() {
         const chartContainer = document.getElementById('time_series_chart');
 
         function updateChart(selectedFeature) {
-            // Prepare the chart data based on the selected feature
-            const chartData = {
-                x: data.map(item => new Date(item.date)),
-                y: data.map(item => item[selectedFeature]),
-                mode: 'lines',
-                line: {
-                    color: '#08a14e',
-                },
-            };
-            // Check if the chart is already rendered
-            if (!chartContainer.data) {
-                // Create a new chart with the selected data
-                Plotly.newPlot(chartContainer, [chartData], {
-                    xaxis: {
-                        type: 'date',
-                    },
-                    yaxis: {
-                        title: {
-                            text: selectedFeature,
+            fetch('/json_data/{{ machine }}/' + selectedFeature)
+                .then(response => response.json())
+                .then(data => {
+                    // Prepare the chart data based on the selected feature
+                    const chartData = {
+                        x: data.map(item => new Date(item.date)),
+                        y: data.map(item => item[selectedFeature]),
+                        mode: 'lines',
+                        line: {
+                            color: '#08a14e',
                         },
-                    },
+                    };
+                    // Check if the chart is already rendered
+                    if (!chartContainer.data) {
+                        // Create a new chart with the selected data
+                        Plotly.newPlot(chartContainer, [chartData], {
+                            xaxis: {
+                                type: 'date',
+                            },
+                            yaxis: {
+                                title: {
+                                    text: selectedFeature,
+                                },
+                            },
+                        });
+                    } else {
+                        // Update the existing chart with the selected data
+                        var updateLayout = {
+                            'yaxis.title': selectedFeature
+                        };
+                        Plotly.update(chartContainer, {x: [chartData.x], y: [chartData.y]}, updateLayout);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching JSON data:', error);
                 });
-            } else {
-                // Update the existing chart with the selected data
-                var updateLayout = {
-                    'yaxis.title': selectedFeature
-                };
-                Plotly.update(chartContainer, {x: [chartData.x], y: [chartData.y]}, updateLayout)
-            }
-            // Set the initial value for the dropdown
         }
 
         window.updateChart = updateChart;
 
         function initializeChart() {
-            // Fetch the JSON data asynchronously using AJAX
-            fetch('/json_data/{{ machine }}')
-                .then(response => response.json())
-                .then(data => {
-                    // Call the updateChart function with the fetched data
-                    updateChart('{{ columns[0] }}', data);
-                })
-                .catch(error => {
-                    console.error('Error fetching JSON data:', error);
-                });
+            const initialFeature = '{{ columns[0] }}';
+            updateChart(initialFeature);
         }
 
         window.initializeChart = initializeChart;
