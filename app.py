@@ -76,6 +76,18 @@ def dashboard_v42():
 def dashboard_v5():
     return render_template('index5.html')
 
+@app.route('/json_data/<machine>')
+def json_data(machine):
+    if machine == "MTP101":
+        df = pd.read_excel("static/dist/pd/MTP101_ariza.xlsx")
+    elif machine == "MTP102":
+        df = pd.read_excel("static/dist/pd/MTP102_ariza.xlsx")
+    else:
+        return "Invalid Data", 400
+    df["date"] = pd.to_datetime(df["date"])
+    data_json = json.dumps(json.loads(df.to_json(orient="records")), ensure_ascii=False)
+    return data_json
+
 
 if __name__ == '__main__':
     app.run(debug=True)
