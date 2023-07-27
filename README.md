@@ -8,6 +8,9 @@ and developed with Python 3.10 using [AdminLTE](https://adminlte.io/) templates.
 - an interactive dashboard for IoT sensor time series data of production lines,
 - an interactive dashboard for machine failure probabilities within a given time.
 
+  Here is a sample deployment I made on heroku, but the language is in Turkish:
+  https://kora-demo.herokuapp.com/#
+
 ## Requirements
 
 - Python 3.10.x
